@@ -1,6 +1,6 @@
-# AI Product Canvas — template
+# AI Product Canvas — Vietnam Airlines Chatbot NEO
 
-Điền Canvas cho product AI của nhóm. Mỗi ô có câu hỏi guide — trả lời trực tiếp, xóa phần in nghiêng khi điền.
+AI Product Canvas — Ngày 5 — VinUni A20 — AI Thực Chiến · 2026
 
 ---
 
@@ -9,16 +9,17 @@
 |   | Value | Trust | Feasibility |
 |---|-------|-------|-------------|
 | **Câu hỏi guide** | User nào? Pain gì? AI giải quyết gì mà cách hiện tại không giải được? | Khi AI sai thì user bị ảnh hưởng thế nào? User biết AI sai bằng cách nào? User sửa bằng cách nào? | Cost bao nhiêu/request? Latency bao lâu? Risk chính là gì? |
-| **Trả lời** | **HR/Recruiters**<br>• Pain: AI hiring tools có bias (giới tính, trường học, keyword matching nguội)<br>• Giải pháp: Chatbot giải thích lỗi AI và hướng dẫn sửa<br>• Khác biệt: Không chỉ detect bias mà còn hướng dẫn fix cụ thể | **Ảnh hưởng nghiêm trọng:**<br>• Mất ứng viên giỏi (đặc biệt nữ/giỏi từ trường tầm trung)<br>• Giảm diversity, tăng rủi ro pháp lý<br>• User biết qua: tỷ lệ pass/fail theo giới tính, audit định kỳ<br>• User sửa: manual review, retrain model, ẩn thông tin nhạy cảm | **Cost thấp:**<br>• ~$0.001/request (hosting chatbot)<br>• Latency: <1s (client-side)<br>• Risk chính: Đưa advice sai → HR tin tưởng advice xấu<br>• Mitigation: human oversight, disclaimer |
+| **Trả lời** | User là hành khách Vietnam Airlines cần tra cứu chuyến bay, chính sách vé, hành lý và hỗ trợ nhanh 24/7. Pain chính là tổng đài chờ lâu và thông tin trên website khó tìm, không theo ngữ cảnh cá nhân. NEO giải quyết bằng cách cho phép hỏi bằng ngôn ngữ tự nhiên và trả lời tức thời các câu hỏi phổ biến. | Khi AI sai, user mất thời gian, nhầm thông tin và mất niềm tin vào hệ thống hỗ trợ. User nhận ra AI sai khi câu trả lời không khớp câu hỏi hoặc lặp menu. User sửa bằng cách hỏi lại theo cách khác, quay menu hoặc tự tìm hotline/email (fallback khó tìm). | Chi phí ước lượng thấp–trung bình (~0.001–0.01 USD/request). Latency khoảng 1–3 giây cho câu hỏi chuẩn. Rủi ro chính là AI trả lời sai chính sách ảnh hưởng uy tín/brand và UX vòng lặp làm user bực. |
 
 ---
 
 ## Automation hay augmentation?
 
-☐ Automation — AI làm thay, user không can thiệp
-☐ **Augmentation — AI gợi ý, user quyết định cuối cùng**
+☐ Automation — AI làm thay, user không can thiệp  
+☑ Augmentation — AI gợi ý, user quyết định cuối cùng
 
-**Justify:** AI hiring bias rất nhạy cảm - nếu automation thì risk cao (loại nhầm ứng viên giỏi). Augmentation tốt hơn: AI gợi ý solutions, HR quyết định implement. Nếu AI sai, user vẫn có thể intervene.
+**Justify:**  
+Domain hàng không có rủi ro cao nếu thông tin sai. User có thể nhận ra AI sai nhưng khó sửa hoặc thoát nhanh, nên automation toàn phần là nguy hiểm. NEO nên đóng vai trò hỗ trợ và có fallback con người rõ ràng.
 
 ---
 
@@ -26,26 +27,9 @@
 
 | # | Câu hỏi | Trả lời |
 |---|---------|---------|
-| 1 | User correction đi vào đâu? | Corrections từ HR (thêm lỗi mới, feedback về solutions) → update error database và chatbot responses |
-| 2 | Product thu signal gì để biết tốt lên hay tệ đi? | • Diversity metrics cải thiện (tỷ lệ nữ tăng, trường non-top tăng)<br>• User satisfaction (survey sau mỗi session)<br>• Usage patterns (nhiều người dùng cùng lỗi = priority cao) |
-| 3 | Data thuộc loại nào? ☐ User-specific · ☐ **Domain-specific** · ☐ Real-time · ☐ **Human-judgment** · ☐ Khác: HR feedback | |
+| 1 | User correction đi vào đâu? | Log phản hồi tiêu cực, câu nói như “không đúng / không hiểu”, hành vi sửa câu hỏi và trigger chuyển tư vấn viên. |
+| 2 | Product thu signal gì để biết tốt lên hay tệ đi? | Tỉ lệ chuyển sang tư vấn viên, số vòng lặp trong một session, tỉ lệ abandon chat và phản hồi tích cực/tiêu cực. |
+| 3 | Data thuộc loại nào? ☐ User-specific · ☐ Domain-specific · ☐ Real-time · ☐ Human-judgment · ☐ Khác | ☑ Domain-specific · ☑ Real-time · ☑ Human-judgment |
 
-**Có marginal value không?** (Model đã biết cái này chưa? Ai khác cũng thu được data này không?)
-Model hiện tại chỉ có 5 lỗi phổ biến - marginal value cao vì:
-• Không có public dataset về AI hiring bias errors
-• Mỗi công ty có context riêng (văn hóa, quy mô)
-• Human judgment từ HR experts rất valuable và unique
-
----
-
-## Cách dùng
-
-1. Điền Value trước — chưa rõ pain thì chưa điền Trust/Feasibility
-2. Trust: trả lời 4 câu UX (đúng → sai → không chắc → user sửa)
-3. Feasibility: ước lượng cost, không cần chính xác — order of magnitude đủ
-4. Learning signal: nghĩ về vòng lặp dài hạn, không chỉ demo ngày mai
-5. Đánh [?] cho chỗ chưa biết — Canvas là hypothesis, không phải đáp án
-
----
-
-*AI Product Canvas — Ngày 5 — VinUni A20 — AI Thực Chiến · 2026*
+**Có marginal value không?**  
+Có. Đây là dữ liệu hội thoại thật và failure cases của hành khách Vietnam Airlines, không có sẵn trên internet và không sản phẩm khác thu được y hệt. Data này giúp cải thiện intent routing và xử lý khi AI sai.
